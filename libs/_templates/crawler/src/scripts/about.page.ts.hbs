@@ -1,0 +1,26 @@
+import {
+  Locators,
+  PlaywrightPage,
+  Selectors,
+} from '../../../shared/playwright.page';
+
+export class {{name}}AboutUsPage
+  extends PlaywrightPage
+  implements Selectors, Locators
+{
+  public static override url = 'https://rfxsolutions.com/about';
+
+  static get selectors() {
+    return {
+      coreValues: '[alt="RFX Core Values"]',
+      ceoImg: '[alt="Amanda Penrod"]'
+    };
+  }
+
+  get locators() {
+    return {
+      coreValues: this.page.locator({{name}}AboutUsPage.selectors.coreValues),
+      ceoImg: this.page.locator({{name}}AboutUsPage.selectors.ceoImg),
+    };
+  }
+}

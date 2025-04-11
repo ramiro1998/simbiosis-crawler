@@ -1,0 +1,64 @@
+{
+  "name": "rfx",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "functions/rfx/src",
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["rfx:build"],
+      "options": {
+        "buildTarget": "rfx:build",
+        "command": "source .env && npx functions-framework --source=./dist/functions/rfx --signature-type=http --env --target=Rfx --port=30000"
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["functions/rfx/**/*.{js,ts}"]
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{workspaceRoot}/coverage/libs/rfx"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/libs/rfx"
+      }
+    },
+    "build": {
+      "executor": "@nx-extend/gcp-functions:build",
+      "options": {
+        "generateLockFile": true,
+        "generatePackageJson": true,
+        "outputPath": "dist/functions/rfx",
+        "main": "functions/rfx/src/main.ts",
+        "tsConfig": "functions/rfx/tsconfig.app.json",
+        "assets": []
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": false,
+          "inspect": false
+        }
+      }
+    },
+    "deploy:http": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "options": {
+        "command": "gcloud functions deploy Rfx --gen2 --region=us-central1 --runtime=nodejs22 --source=./dist/functions/rfx --entry-point=Rfx --timeout=540 "
+      }
+    },
+    "deploy:cloud-event": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "options": {
+        "command": "gcloud functions deploy RfxCloudEvent --gen2 --region=us-central1 --runtime=nodejs22 --source=./dist/functions/rfx --entry-point=RfxCloudEvent --timeout=540"
+      }
+    }
+  },
+  "tags": []
+}

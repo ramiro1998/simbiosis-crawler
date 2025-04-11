@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "outDir": "../../dist/out-vitest/rfx",
+    "types": ["vitest", "node"]
+  },
+  "include": [
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "**/*.spec.js",
+    "**/*.spec.jsx",
+    "**/*.d.ts"
+  ]
+}

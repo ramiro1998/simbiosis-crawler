@@ -1,0 +1,7 @@
+import { z } from 'zod';
+
+export const {{name}}OutputSchema = z.object({
+  ceoImgUrl: z.string().url(),
+});
+
+export type {{name}}OutputSchemaDto = z.infer<typeof {{name}}OutputSchema>;

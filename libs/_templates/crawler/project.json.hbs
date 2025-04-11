@@ -1,0 +1,64 @@
+{
+  "name": "{{kebabCase name}}",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "functions/{{kebabCase name}}/src",
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["{{kebabCase name}}:build"],
+      "options": {
+        "buildTarget": "{{kebabCase name}}:build",
+        "command": "source .env && npx functions-framework --source=./dist/functions/{{kebabCase name}} --signature-type=http --env --target={{name}} --port=30000"
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["functions/{{kebabCase name}}/**/*.{js,ts}"]
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{workspaceRoot}/coverage/libs/{{kebabCase name}}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/libs/{{kebabCase name}}"
+      }
+    },
+    "build": {
+      "executor": "@nx-extend/gcp-functions:build",
+      "options": {
+        "generateLockFile": true,
+        "generatePackageJson": true,
+        "outputPath": "dist/functions/{{kebabCase name}}",
+        "main": "functions/{{kebabCase name}}/src/main.ts",
+        "tsConfig": "functions/{{kebabCase name}}/tsconfig.app.json",
+        "assets": []
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": false,
+          "inspect": false
+        }
+      }
+    },
+    "deploy:http": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "options": {
+        "command": "gcloud functions deploy {{name}} --gen2 --region=us-central1 --runtime=nodejs22 --source=./dist/functions/{{kebabCase name}} --entry-point={{name}} --timeout=540 "
+      }
+    },
+    "deploy:cloud-event": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "options": {
+        "command": "gcloud functions deploy {{name}}CloudEvent --gen2 --region=us-central1 --runtime=nodejs22 --source=./dist/functions/{{kebabCase name}} --entry-point={{name}}CloudEvent --timeout=540"
+      }
+    }
+  },
+  "tags": []
+}

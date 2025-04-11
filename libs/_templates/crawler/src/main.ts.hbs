@@ -1,0 +1,43 @@
+import { type HttpFunction, cloudEvent } from '@google-cloud/functions-framework';
+import { Functions } from '@crawlers/zod-schema';
+
+import { {{name}}Crawler, {{name}}CrawlerConfig } from './{{kebabCase name}}.crawler';
+
+const sharedConfig: Omit<{{name}}CrawlerConfig, 'trigger' | 'req' | 'res' | 'event'> = {
+  retryCount: 3,
+  timeoutMs: 30000,
+  EnvSchema: Functions.{{name}}.{{name}}EnvSchema,
+  InputSchema: Functions.{{name}}.{{name}}InputSchema,
+  OutputSchema: Functions.{{name}}.{{name}}OutputSchema,
+}
+
+/**
+* @description entry point for triggering this function using an http request
+* @warning When changing "{{name}}" to something else, make sure to also update the "entryPoint" inside the "project.json"
+*/
+export const {{name}}: HttpFunction = async (req, res) => {
+  const config: {{name}}CrawlerConfig = {
+  trigger: 'http',
+    req,
+    res,
+    ...sharedConfig
+  }
+
+  const crawler = new {{name}}Crawler(config)
+  await crawler.run()
+};
+
+/**
+* @description entry point for triggering this function using an event-arc cloud event
+*/
+cloudEvent('{{name}}CloudEvent', async (cloudEvent) => {
+  const config: {{name}}CrawlerConfig = {
+    trigger: 'cloudevent',
+    event: cloudEvent,
+    ...sharedConfig
+  }
+
+  const crawler = new {{name}}Crawler(config)
+  await crawler.run()
+  return crawler.output
+})

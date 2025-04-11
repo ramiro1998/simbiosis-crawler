@@ -1,0 +1,7 @@
+import { z } from 'zod';
+
+export const {{name}}InputSchema = z.object({
+  ranBy: z.string(),
+});
+
+export type {{name}}InputSchemaDto = z.infer<typeof {{name}}InputSchema>;

@@ -1,0 +1,25 @@
+import { Crawler, CrawlerConfig } from '@crawlers/browser';
+import { Scripts } from '@crawlers/playwright-scripts';
+import { Functions } from '@crawlers/zod-schema';
+import assert = require('assert');
+
+export class {{name}}Crawler extends Crawler<
+  typeof Functions.{{name}}.{{name}}InputSchema,
+  typeof Functions.{{name}}.{{name}}EnvSchema,
+  typeof Functions.{{name}}.{{name}}OutputSchema
+> {
+  override async script() {
+      assert(this.input && this.env, `Missing input or env`);
+
+      const page = await this.setupBrowser();
+
+      const script = new Scripts.Functions.{{name}}Script(page, this.input)
+
+      const results = await script.run()
+
+      this.setOutput(results);
+    }
+  }
+
+  export type {{name}}CrawlerConfig = CrawlerConfig<typeof Functions.{{name}}.{{name}}InputSchema, typeof
+    Functions.{{name}}.{{name}}EnvSchema, typeof Functions.{{name}}.{{name}}OutputSchema>;

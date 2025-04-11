@@ -1,0 +1,7 @@
+import { z } from 'zod';
+
+export const {{name}}EnvSchema = z.object({
+  HEADED_BROWSER_MODE: z.string(),
+});
+
+export type {{name}}EnvSchemaDto = z.infer<typeof {{name}}EnvSchema>;

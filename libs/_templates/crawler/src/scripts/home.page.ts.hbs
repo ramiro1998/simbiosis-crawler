@@ -1,0 +1,31 @@
+import {
+  Locators,
+  PlaywrightPage,
+  Selectors,
+} from '../../../shared/playwright.page';
+import { {{name}}AboutUsPage } from './{{kebabCase name}}-about.page';
+
+export class {{name}}HomePage
+  extends PlaywrightPage
+  implements Selectors, Locators
+{
+  public static override url = 'https://rfxsolutions.com';
+
+  static get selectors() {
+    return {
+      aboutUs: '[href="about"]',
+    };
+  }
+
+  get locators() {
+    return {
+      aboutUs: this.page.locator({{name}}HomePage.selectors.aboutUs),
+    };
+  }
+
+  async navToAboutUs () {
+    await this.locators.aboutUs.click()
+    await this.page.waitForURL({{name}}AboutUsPage.url)
+    return new {{name}}AboutUsPage(this.page)
+  }
+}
