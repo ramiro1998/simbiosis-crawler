@@ -1,6 +1,0 @@
-{
-  "*.ts": ["prettier --write --html-whitespace-sensitivity=strict", "eslint"],
-  "*.html": ["eslint", "prettier --write --html-whitespace-sensitivity=strict"],
-  "*.css": "prettier --write --html-whitespace-sensitivity=strict",
-  "*.json": "prettier --write --html-whitespace-sensitivity=strict"
-}

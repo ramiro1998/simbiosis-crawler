@@ -17,8 +17,8 @@ nvm use
 # Install node modules
 npm i
 
-# Create a `.env` file manually using `sample.env` or with the script below.
-mv sample.env .env
+# Create a `.env` file, if one is not present, manually using `sample.env` or with the script below.
+cp sample.env .env
 ```
 
 ## Technical Assessment
