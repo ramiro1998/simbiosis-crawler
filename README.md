@@ -33,7 +33,7 @@ Using the tooling provided, generate a crawler and write a playwright script tha
 
 1. Navigates to `https://eservices.nysed.gov/professions/verification-search`.
 2. Search for the following license number `145661` by selecting license type `Physician (060)`.
-3. Click `MORE DETAIL` details for this record.
+3. Click details for this record.
 4. Capture a pdf screenshot of the details page using playwright and store the pdf file in the downloads directory provided on the root of this project.
 5. Zip the completed project into a single file and return it to your recruiter.
 
