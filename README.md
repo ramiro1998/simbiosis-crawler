@@ -84,7 +84,7 @@ npx nx serve simbiosis
 ### Trigger Crawler Cloud Function
 
 ```sh
-# Trigger the cloud function using your preferred http client (curl/get/postman)
+# Trigger the cloud function using your preferred http client (curl/wget/postman)
 curl --location 'http://localhost:30000' \
 --header 'Content-Type: application/json' \
 --data '{
