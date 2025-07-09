@@ -1,0 +1,64 @@
+{
+  "name": "simbiosis",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "functions/simbiosis/src",
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["simbiosis:build"],
+      "options": {
+        "buildTarget": "simbiosis:build",
+        "command": "source .env && npx functions-framework --source=./dist/functions/simbiosis --signature-type=http --env --target=Simbiosis --port=30000"
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["functions/simbiosis/**/*.{js,ts}"]
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{workspaceRoot}/coverage/libs/simbiosis"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/libs/simbiosis"
+      }
+    },
+    "build": {
+      "executor": "@nx-extend/gcp-functions:build",
+      "options": {
+        "generateLockFile": true,
+        "generatePackageJson": true,
+        "outputPath": "dist/functions/simbiosis",
+        "main": "functions/simbiosis/src/main.ts",
+        "tsConfig": "functions/simbiosis/tsconfig.app.json",
+        "assets": []
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": false,
+          "inspect": false
+        }
+      }
+    },
+    "deploy:http": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "options": {
+        "command": "gcloud functions deploy Simbiosis --gen2 --region=us-central1 --runtime=nodejs22 --source=./dist/functions/simbiosis --entry-point=Simbiosis --timeout=540 "
+      }
+    },
+    "deploy:cloud-event": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "options": {
+        "command": "gcloud functions deploy SimbiosisCloudEvent --gen2 --region=us-central1 --runtime=nodejs22 --source=./dist/functions/simbiosis --entry-point=SimbiosisCloudEvent --timeout=540"
+      }
+    }
+  },
+  "tags": []
+}

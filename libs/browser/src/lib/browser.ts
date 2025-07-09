@@ -16,14 +16,14 @@ export async function getBrowser(): Promise<Payload> {
     browser = await playwright.launch(
       process.env['NODE_ENV'] === 'production'
         ? {
-            args: [...chromium.args, '--disable-web-security'],
-            executablePath: await chromium.executablePath(),
-            headless: true,
-          }
+          args: [...chromium.args, '--disable-web-security'],
+          executablePath: await chromium.executablePath(),
+          headless: false,
+        }
         : {
-            headless: true,
-            args: ['--disable-web-security'],
-          }
+          headless: false,
+          args: ['--disable-web-security'],
+        }
     );
     browserContext = await browser.newContext({
       viewport: { width: 1000, height: 1200 },
