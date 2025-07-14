@@ -14,7 +14,7 @@ export class SimbiosisHomePage {
     await searchByInput.click();
     await this.page.waitForSelector('ul.vue-dropdown li.vue-dropdown-item');
     await this.page.click('ul.vue-dropdown li.vue-dropdown-item >> text=License Number');
-    await this.page.waitForTimeout(2000);
+    await this.page.waitForTimeout(200);
 
     const professionInput = this.page.locator('label:has-text("Profession")')
       .locator('xpath=following-sibling::div')
@@ -40,10 +40,10 @@ export class SimbiosisHomePage {
 
   async goToDetails() {
     const licenseLink = this.page.locator('a.information', { hasText: '145661' });
-    await licenseLink.waitFor({ state: 'visible', timeout: 10000 });
+    await licenseLink.waitFor({ state: 'visible', timeout: 200 });
     await licenseLink.click();
-    await this.page.waitForSelector('div.modal.show', { timeout: 10000 });
-    await this.page.waitForSelector('div.modal.show >> text=Loading...', { state: 'hidden', timeout: 15000 });
+    await this.page.waitForSelector('div.modal.show', { timeout: 200 });
+    await this.page.waitForSelector('div.modal.show >> text=Loading...', { state: 'hidden', timeout: 200 });
   }
 
 }
